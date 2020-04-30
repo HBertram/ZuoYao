@@ -1,13 +1,19 @@
 <template>
   <view>
-	<uni-section v-show="showSection" :title="title" type="line"></uni-section>
-    <checkbox-group class="content" @change="checkboxChange">
-		<template v-for="(item,index) in labelList">
-			<label @click="labelBtn(item.value,index)" :key="item.value" :class="item.checked ?  'checkbox selectBox' : 'checkbox '">  
-				<checkbox :value="item.value" :checked="item.checked" v-show="false"/>{{item.name}}
+	  <template v-for="groupActivity in groupActivityList">
+		  <uni-section class="section" v-show="showSection" :title="groupActivity.name" type="line"></uni-section>
+		  <checkbox-group class="content">
+			<template v-for="(item,index) in groupActivity.activityList">
+				<label @click="labelBtn(item.value, index)" :key="index" :class="item.checked ?  'checkbox selectBox' : 'checkbox '">  
+					<checkbox :checked="item.checked" v-show="false"/>{{item.name}}
+				</label>
+			</template>
+			<label v-if="false" class="checkbox add-tag" @click="addTag.isAdding = true">
+				<input v-show="addTag.isAdding" v-model="addTag.value" type="text" :style="{width:text(addTag.value)}"/>
+				<uni-tag v-show="!addTag.isAdding">{{ addTag.text }}</uni-tag>
 			</label>
-		</template>
-    </checkbox-group>
+		  </checkbox-group>
+	  </template>
   </view>
 </template>
 
@@ -24,25 +30,43 @@
 			  required: false,
 			  default: "标签"
 		  },
-		  labelList: {
+		  type: {
+			  type: String,
+			  required: false,
+			  default: "default"
+		  },
+		  groupActivityList: {
 			  type: Array,
-			  default: [],
+			  default: {},
 			  required: true
 		  }
 	  },
     data() {
       return {
-        labelName:''
+		  addTag: {
+			  value: "",
+			  isAdding: false,
+			  text: "点击新增"
+		  }
       };
     },
     methods:{
+		text () {
+		  return function (value) {
+			if (value == '' || value == 0) {
+			  return '100%'
+			} else {
+			  return String(value).length * 0.32 + 'rem'
+			}
+		  }
+		},
       labelBtn(name,index){
-        this.labelName = name
-	    this.labelList[index].checked = this.labelDataList.includes(name)
-      },
-      checkboxChange: function (e) {
-        this.labelDataList = e.detail.value
-      },
+	    this.activityGroup[index].checked = !this.activityGroup[index].checked
+		this.$emit("changeValue", {type: this.type, totalValue: this.getTotalValue()})
+	  },
+	  getTotalValue() {
+		  return this.activityGroup.map((o) => o.activityList.getCheckedValue()).reduce((i, j) => i+j); 
+	  }
     }
   }
 </script>
@@ -62,6 +86,13 @@
     color: #000;
   }
   .content{
-    padding: 10px;
+    padding: 5upx 20upx 5upx 20upx;
+  }
+  .add-tag{
+	
+  }
+  .section{
+	  height: 70upx;
+	  margin: 0upx;
   }
 </style>

@@ -1,0 +1,49 @@
+.container {
+}
+.bghead{
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 300upx;
+	width: 100%;
+	background-color: #66ccff;
+	z-index: -1;
+}	
+.top {
+	flex-direction: column;
+	
+	.top-title {
+		height: 80upx;
+	}
+	
+	.top-content {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;	
+		
+		.top-box {
+			border: 1px solid #66ccff;
+			width: 700upx;
+			height: 240upx;
+			background-color: #fafeff;
+			border-radius: 15upx;
+			display: flex;
+			justify-content: space-around;
+			.total-mark {
+				margin-top: 25upx;
+			}
+			.total-mark-label {
+				text-align: center;
+				line-height: 40upx;
+				font-size: 25upx;
+				color: #212121;
+			}
+		}
+	}
+}
+.main {
+}
+
+
+
+

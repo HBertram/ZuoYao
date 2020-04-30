@@ -1,88 +1,81 @@
 <template>
 	<view class="container">
-		<view class="bghead"></view>
 		<view class="top">
 			<view class="top-title">
-				asdasd
 			</view>
 			<view class="top-content">
 				<view class="top-box">
-					asdasd
+					<view class="total-mark">
+						<cmd-progress type="circle" :percent="totalValue"></cmd-progress>
+						<view class="total-mark-label">昨日得分</view>
+					</view>
+					<view class="total-mark">
+						<cmd-progress type="circle" :percent="currentPercent"></cmd-progress>
+						<view class="total-mark-label">今日得分</view>
+					</view>
 				</view>
 			</view>
 		</view>
 		<view class="main">
-			<bert-tag-group title="生活" :labelList="labelList"></bert-tag-group>
-			<bert-tag-group title="学习" :labelList="labelList"></bert-tag-group>
-			<bert-tag-group title="工作" :labelList="labelList"></bert-tag-group>
-			<bert-tag-group title="交际" :labelList="labelList"></bert-tag-group>
+			<bert-swiper :tabList="tabList" @change="sectionListChanged">
+				<slot v-for="(page, index) in sectionList" :slot="tabList[index].id" >
+					<bert-tag-group :type="page.type" :title="page.title" :groupActivityList="page.groupActivityList" @changeValue="activityChange"></bert-tag-group>
+				</slot>
+			</bert-swiper>
 		</view>
+		<view class="bghead"></view>
 	</view>
 </template>
 
 <script>
+	import api from "@/store/api.js"
+	import bertSwiper from "@/components/bert-swiper/bert-swiper.nvue"
 	import uniSection from "@/components/uni-section/uni-section.vue"
 	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"
   export default {
+	  components: {bertSwiper, bertTagGroup, uniSection},
     data() {
+		console.log(api.section.get())
       return {
-		  labelList: [
-			{
-				name: '吃饭',
-				value: '1',
-				checked: false
-			},
-			{
-				name: '睡觉',
-				value: '2',
-				checked: false
-			},
-			{
-				name: '瘦了',
-				value: '3',
-				checked: false
-			},
-			{
-				name: '吃大餐',
-				value: '4',
-				checked: false
-			},
-			{
-				name: '做运动',
-				value: '5',
-				checked: false
-			}
-		  ]
+		  currentSection: {},
+		  sectionList: api.section.get()
 	  }
     },
+	computed: {
+		totalValue() {
+			return this.sectionList.map((l) => l.totalValue).reduce((i,j) => i+j) || 0
+		},
+		currentPercent() {
+			return Number(this.getCompletePercent(this.currentSection));
+		},
+		tabList() {
+			let tabList = []
+			return this.sectionList.map((o, i) => {
+				return {
+					id: 'page-'+i,
+					name: o.title
+				}
+			})
+		}
+	},
+	onLoad() {
+
+	},
     methods:{
+		sectionListChanged(index) {
+			this.currentSection = this.sectionList[index]
+		},
+		getCompletePercent(activity) {
+			return (!!activity.totalValue ? 100 * activity.currentValue / activity.totalValue : 0).toFixed()
+		},
+		activityChange(param) {
+			this.currentSection = this.sectionList.find((o) => o.type == param.type);
+			this.currentSection.currentValue = param.totalValue;
+		}
     }
   }
 </script>
 
 <style>
-	.bghead{
-		position: absolute;
-		left: 0;
-		top: 0;
-		height: 300rpx;
-		width: 100%;
-		background-color: #66ccff;
-		z-index: -1;
-	}	
-	.top {
-		flex-direction: column;
-		.top-content {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-around;	
-			
-			.top-box {
-				width: 700upx;
-				height: 220upx;
-				background-color: #ffffff;
-				border-radius: 15upx;
-			}
-		}
-	}
+@import "./tabbar-1.css"
 </style>
