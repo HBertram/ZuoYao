@@ -1,0 +1,49 @@
+.container {
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  /* #ifdef MP-ALIPAY || MP-BAIDU */
+  height: 100vh;
+  /* #endif */ }
+
+.tabs {
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+  /* #ifdef MP-ALIPAY || MP-BAIDU */
+  height: 100vh;
+  /* #endif */ }
+
+.bghead {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 300rpx;
+  width: 100%;
+  background-color: #66ccff;
+  z-index: -1; }
+
+.top {
+  flex-direction: column; }
+  .top .top-title {
+    height: 80rpx; }
+  .top .top-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; }
+    .top .top-content .top-box {
+      border: 1px solid #66ccff;
+      width: 700rpx;
+      height: 240rpx;
+      background-color: #fafeff;
+      border-radius: 15rpx;
+      display: flex;
+      justify-content: space-around; }
+      .top .top-content .top-box .total-mark {
+        margin-top: 25rpx; }
+      .top .top-content .top-box .total-mark-label {
+        text-align: center;
+        line-height: 40rpx;
+        font-size: 25rpx;
+        color: #212121; }

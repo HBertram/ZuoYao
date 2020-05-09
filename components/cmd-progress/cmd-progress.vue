@@ -409,7 +409,7 @@
 
   .cmd-progress-line {
     width: 100%;
-    font-size: 28upx;
+    font-size: 28rpx;
     position: relative;
     display: flex;
     flex-direction: row;
@@ -432,7 +432,7 @@
     display: inline-block;
     width: 100%;
     background-color: #f5f5f5;
-    border-radius: 200upx;
+    border-radius: 200rpx;
     vertical-align: middle;
     position: relative;
   }
@@ -462,9 +462,9 @@
 
   .cmd-progress-text {
     word-break: normal;
-    width: 60upx;
+    width: 60rpx;
     text-align: left;
-    margin-left: 16upx;
+    margin-left: 16rpx;
     vertical-align: middle;
     display: inline-block;
     white-space: nowrap;
@@ -481,7 +481,7 @@
     right: 0;
     bottom: 0;
     background: #fff;
-    border-radius: 20upx;
+    border-radius: 20rpx;
     -webkit-animation: cmd-progress-active 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
     animation: cmd-progress-active 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
   }

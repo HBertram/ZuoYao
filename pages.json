@@ -4,7 +4,17 @@
 		{
 			"path": "pages/tabbar/tabbar-1/tabbar-1",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarBackgroundColor": "#66ccff",
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleNView": {
+						"titleColor": "#ffffff",
+						"buttons": [{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue502"
+						}]
+					}
+				}
 			}
 		},
 		{
@@ -34,6 +44,58 @@
 		{
 			"path": "pages/tabbar-3-detial/tabbar-3-qa/tabbar-3-qa",
 			"style": {}
+		},
+		{
+			"path": "pages/activity/activity-detail",
+			"style": {}
+		},
+		{
+			"path": "pages/common/input",
+			"style": {
+				"navigationBarBackgroundColor": "#66ccff",
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleNView": {
+						"titleColor": "#ffffff",
+						"buttons": [{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue472"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/activity/activity-edit",
+			"style": {
+				"navigationBarBackgroundColor": "#66ccff",
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleNView": {
+						"titleColor": "#ffffff",
+						"buttons": [{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue472"
+						}]
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/chapter/chapter-edit",
+			"style": {
+				"navigationBarBackgroundColor": "#66ccff",
+				"navigationBarTitleText": "uni-app",
+				"app-plus": {
+					"titleNView": {
+						"titleColor": "#ffffff",
+						"buttons": [{
+							"fontSize":"large",
+							"text": "OK"
+						}]
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

@@ -5,15 +5,15 @@ let api = {
 	section: {
 		get(param) {
 			let lst = [];
-			lst.push(new Chapter("life", "生活篇", [api.groupAcitivity.get({type: "life", name: "生活篇"}), api.groupAcitivity.get({type: "social", name: "社交篇"})]))
-			lst.push(new Chapter("study", "学习篇", [api.groupAcitivity.get({type: "life", name: "学习篇"})]))
-			lst.push(new Chapter("work", "工作篇", [api.groupAcitivity.get({type: "work", name: "工作篇"})]))
-			lst.push(new Chapter("social", "社交篇", [api.groupAcitivity.get({type: "social", name: "社交篇"})]))
+			lst.push(new Chapter(1, "life", "生活篇", [api.groupAcitivity.get({type: "life", name: "生活篇"}),api.groupAcitivity.get({type: "life", name: "生活篇"}),api.groupAcitivity.get({type: "life", name: "生活篇"}),api.groupAcitivity.get({type: "life", name: "生活篇"}), api.groupAcitivity.get({type: "social", name: "社交篇"})]))
+			lst.push(new Chapter(2, "study", "学习篇", [api.groupAcitivity.get({type: "life", name: "学习篇"})]))
+			lst.push(new Chapter(3, "work", "工作篇", [api.groupAcitivity.get({type: "work", name: "工作篇"})]))
+			lst.push(new Chapter(4, "social", "社交篇", [api.groupAcitivity.get({type: "social", name: "社交篇"})]))
 			return lst
 		}
 	},
 	activity: {
-		get(param) {
+		getDefault(param) {
 			let lst = [];
 			if (param.type == "life") {
 				lst.push(new Activity("吃饭", 1))
@@ -36,6 +36,12 @@ let api = {
 				lst.push(new Activity("多人运动", 1))
 			}
 			return lst
+		},
+		get(param) {
+			uni.getStorage({
+				
+			})
+			return api.activity.getDefault(param)
 		}
 	},
 	groupAcitivity: {

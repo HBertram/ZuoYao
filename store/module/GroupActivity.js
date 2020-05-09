@@ -9,7 +9,6 @@ export default class GroupActivity{
   //constructor构造函数
   constructor(name, type, activityList){
     this.name = name;
-	this.type = type;
     this.activityList = activityList;
   }
 
