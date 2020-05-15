@@ -42,7 +42,7 @@
 </template>
 <script>
     import mediaItem from './news-item.nvue';
-	import api from "@/store/api.js"
+	import api from "@/api/api.js"
 	import bertSwiper from "@/components/bert-swiper/bert-swiper.vue"
 	import uniSection from "@/components/uni-section/uni-section.vue"
 	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"

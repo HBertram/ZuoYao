@@ -15,25 +15,25 @@
 		<view v-else>
 			<view class="form-item uni-flex">
 				<view class="form-label">描述</view>
-				<text class="form-value">生活中寻找美丽的瞬间</text>
+				<text class="form-value">{{plan.description}}</text>
 			</view>
 			<view class="form-item uni-flex">
 				<view class="form-label">注意事项</view>
-				<text class="form-value">无</text>
+				<text class="form-value">{{plan.attention}}</text>
 			</view>
 		</view>
 	</view>
-	<template v-for="(groupActivity, groupIndex) in chapter.groupActivityList">
-		<view v-if="!!groupActivity.activityList.length" :key="groupActivity.id">
+	<template v-for="(groupActivity, groupIndex) in plan.tasks">
+		<view v-if="!!groupActivity.activities.length" :key="groupActivity.id">
 		  <uni-section class="section" v-show="showSection" :title="groupActivity.name" type="line"></uni-section>
 		  <checkbox-group class="content">
-				<template v-for="(item, index) in groupActivity.activityList">
+				<template v-for="(item, index) in groupActivity.activities">
 					<view :key="item.id" :class="item.checked && !isEdit ?  'activity-item selectBox' : 'activity-item '">
 						<checkbox :checked="item.checked" v-show="false"/>
 						<text @longpress="showDetail(item)" @click="onActivityClick(item)" :key="index" >  
 							{{item.name}}
 						</text>
-						<uni-icons v-if="isEdit" @click="deleteActivity(groupActivity.activityList, item)" class="delete-icon" type="closeempty"></uni-icons>
+						<uni-icons v-if="isEdit" @click="deleteActivity(item)" class="delete-icon" type="closeempty"></uni-icons>
 					</view>
 				</template>
 				<view v-if="isEdit" class="add-activity-button" @click="addActivity(groupActivity)">
@@ -50,9 +50,11 @@
 
 
 <script>
+	import { SET_ACTIVITY } from "@/store/mutations_type.js"
 	import uniIcons from "@/components/uni-icons/uni-icons.vue"
 	import evanForm from "@/components/evan-form/evan-form.vue"
 	import evanFormItem from "@/components/evan-form/evan-form-item.vue"
+	import { mapActions } from "vuex"
   export default {
 	  components: {evanForm, evanFormItem},
 	  props: {
@@ -76,8 +78,8 @@
 			  required: false,
 			  default: "default"
 		  },
-		  chapter: {
-			  type: Object,
+		  plan_id: {
+			  type: Number,
 			  required: true
 		  }
 	  },
@@ -90,7 +92,13 @@
 		  }
       };
     },
+	computed: {
+		plan() { return this.$store.getters["plan/getPlan"]({ plan_id: this.plan_id })}
+	},
     methods:{
+		...mapActions({
+			"setActivityCheckState": "active/setActivityCheckState"
+		}),
 		addGroup() {
 			
 		},
@@ -98,33 +106,24 @@
 			this.navigator.toActivityEdit()
 		},
 		editActivity() {
-			this.navigator.toActivityEdit()
 		},
 		onActivityClick(item) {
 			if (this.isEdit) {
-				this.editActivity(item)
+				this.navigator.toActivityEdit({ type: "edit", activity_id: item.id })
 			} else {
+				this.setActivityCheckState({ date: "2020-05-14", id: item.id, checked: !item.checked })
 				item.checked = !item.checked
 			}
 		},
 		showDetail(item) {
-			this.navigator.toActivityDetail()
-		},
-		text () {
-		  return function (value) {
-			if (value == '' || value == 0) {
-			  return '100%'
-			} else {
-			  return String(value).length * 0.32 + 'rem'
-			}
-		  }
+			this.navigator.toActivityDetail({ activity_id: item.id })
 		},
       labelBtn(e) {
 		  console.log(e)
 		this.$emit("changeValue")
 	  },
 	  getTotalValue() {
-		  return this.chapter.activityGroup.map((o) => o.activityList.getCheckedValue()).reduce((i, j) => i+j); 
+		  return this.plan.activityGroup.map((o) => o.activities.getCheckedValue()).reduce((i, j) => i+j); 
 	  },
 	  deleteActivity(lst, item) {
 		  lst.splice(lst.indexOf(item), 1);
@@ -142,7 +141,7 @@
 	position: relative;
 	display: inline-block;
 	flex-wrap: wrap;
-	padding: 5rpx 10rpx;
+	padding: 10rpx 20rpx;
 	border: 1rpx solid #EB5248;
 	margin: 12rpx;
 	border-radius: 7rpx;

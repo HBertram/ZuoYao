@@ -2,17 +2,17 @@
 	<view class="container" style="width: 100%;">
 		<view class="main">
 			<scroll-view class="scroll-view_H" :show-scrollbar="false" scroll-x="true">
-				<template v-for="(tab,index) in sectionList">
-					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{tab.title}}</view>
+				<template v-for="(plan, index) in plans">
+					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{plan.title}}</view>
 				</template>
-				<view class="tab-under-line" :style="{left: (currentSectionIndex*20 + 1) + '%'}" ></view>
+				<view class="tab-under-line" :style="{left: (currentTabIndex*20 + 1) + '%'}" ></view>
 			</scroll-view>
 		</view>
-		<swiper :current="currentSectionIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
-			<template v-for="(tab, index) in sectionList">
+		<swiper :current="currentTabIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
+			<template v-for="(plan, index) in plans">
 				<swiper-item>
 					<scroll-view scroll-y="true" style="height: 100%;">
-						<bert-tag-group :isEdit="true" :chapter="tab" @changeValue="onChangeValue"></bert-tag-group>
+						<bert-tag-group :isEdit="true" :plan_id="plan.id"></bert-tag-group>
 					</scroll-view>
 				</swiper-item>
 			</template>
@@ -21,23 +21,31 @@
 </template>
 
 <script>
-	import api from "@/store/api.js"
+	import api from "@/api/api.js"
 	import bertSwiper from "@/components/bert-swiper/bert-swiper.vue"
 	import uniSection from "@/components/uni-section/uni-section.vue"
 	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"
-	import uCharts from "@/js_sdk/u-charts/u-charts/u-charts.min.js"
+	import { mapState, mapGetters } from 'vuex'
     export default {
-	    components: {bertSwiper, bertTagGroup, uniSection, uCharts},
+	    components: {bertSwiper, bertTagGroup, uniSection},
 		data() { 
 			let sectionList = api.section.get()
 			return {
 				swiperHeight: 100,
-				currentSectionIndex: 0,
-				sectionList: sectionList,
-				currentSection: sectionList[0]
+				currentTabIndex: 0
 			}
 		},
 	computed: {
+		...mapState({
+			plan: "plan",
+			count: "count"
+		}),
+		...mapGetters({
+			getTotalValue: "plan/getTotalValue",
+			getCheckedValue: "plan/getCheckedValue",
+			plans: "plan/plans"
+		}),
+		currentPlan() { return this.plans[this.currentTabIndex] }
 	},
 	watch: {
 	},
@@ -56,23 +64,15 @@
 			let index = e.target.current || e.detail.current;
 		    this.switchTab(index);
 		},
-		onChangeValue() {
-		},
 		ontabtap(e) {
 		    let index = e.target.dataset.current || e.currentTarget.dataset.current;
-			console.log(index)
 			this.switchTab(index);
 		},
 		switchTab(index) {
-			if (this.currentSectionIndex === index) {
+			if (this.currentTabIndex == index) {
 			    return;
 			}
-			this.currentSectionIndex = index
-			this.currentSection = this.sectionList[index]
-		},
-		getCompletePercent(section) {
-			console.log(section)
-			return (!!section.totalValue ? 100 * section.getCheckedValue() / section.totalValue : 0).toFixed()
+			this.currentTabIndex = index
 		}
     },
 	onNavigationBarButtonTap() {

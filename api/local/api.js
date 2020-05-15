@@ -1,6 +1,6 @@
-import Activity from "@/store/module/Activity.js"
-import Chapter from "@/store/module/Chapter.js"
-import GroupActivity from "@/store/module/GroupActivity.js"
+import Activity from "@/api/module/Activity.js"
+import Chapter from "@/api/module/Chapter.js"
+import GroupActivity from "@/api/module/GroupActivity.js"
 let api = {
 	section: {
 		get(param) {

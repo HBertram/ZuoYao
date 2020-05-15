@@ -82,7 +82,7 @@
 			}
 		},
 		{
-			"path": "pages/chapter/chapter-edit",
+			"path": "pages/plan/plan-edit",
 			"style": {
 				"navigationBarBackgroundColor": "#66ccff",
 				"navigationBarTitleText": "uni-app",

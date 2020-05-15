@@ -8,10 +8,10 @@
 				<input type="number" class="form-input" placeholder-class="form-input-placeholder" v-model="activity.value" placeholder="输入分值" />
 			</evan-form-item>
 			<evan-form-item label="简介：" prop="desc" label-position="top">
-				<textarea class="form-input textarea" placeholder-class="form-input-placeholder" v-model="activity.purpose" placeholder="请输入简介(10-30个字)" />
+				<textarea class="form-input textarea" placeholder-class="form-input-placeholder" v-model="activity.description" placeholder="请输入简介(10-30个字)" />
 			</evan-form-item>
 			<evan-form-item label="注意事项：" prop="desc" label-position="top">
-				<textarea class="form-input textarea" placeholder-class="form-input-placeholder" v-model="activity.desc" placeholder="请输入简介(10-30个字)" />
+				<textarea class="form-input textarea" placeholder-class="form-input-placeholder" v-model="activity.attention" placeholder="请输入简介(10-30个字)" />
 			</evan-form-item>
 		</evan-form>
 	</view>
@@ -20,17 +20,45 @@
 <script>
 	import evanForm from "@/components/evan-form/evan-form.vue"
 	import evanFormItem from "@/components/evan-form/evan-form-item.vue"
+	import { mapState, mapGetters, mapActions } from 'vuex'
 	export default {
 		components: {evanForm, evanFormItem},
 		data() {
 			return {
+				type: "",
 				activity: {
 					name: "",
 					value: 0,
-					purpose: "",
-					desc: "",
+					attention: "",
+					description: "",
 					phone: ""
 				}
+			}
+		},
+		computed: {
+			...mapGetters({
+				getActivity: "activity/getActivity"
+			})
+		},
+		methods: {
+			...mapActions({
+				editActivity: "activity/editActivity"
+			})
+		},
+		onLoad({ type, activity_id }) {
+			if (type == "edit") {
+				this.type = type
+				Object.assign(this.activity, this.getActivity({ id: activity_id }))
+			}
+		},
+		onNavigationBarButtonTap() {
+			if (this.type == "edit") {
+				this.editActivity(this.activity).then(() => {
+					
+				})
+				uni.navigateBack({
+					
+				})
 			}
 		}
 	}

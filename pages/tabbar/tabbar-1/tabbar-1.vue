@@ -1,7 +1,8 @@
 <template>
 	<view class="container" style="width: 100%;">
 		<view class="top">
-			<view class="top-title"></view>
+			<view class="top-title">
+			</view>
 			<view class="top-content">
 				<view class="top-box">
 					<view class="total-mark">
@@ -12,16 +13,16 @@
 		</view>
 		<view class="main">
 			<scroll-view class="scroll-view_H" :show-scrollbar="false" scroll-x="true">
-				<template v-for="(tab,index) in sectionList">
-					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{tab.title}}</view>
+				<template v-for="(plan, index) in plans">
+					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{plan.title}}</view>
 				</template>
-				<view class="tab-under-line" :style="{left: (currentSectionIndex*20 + 1) + '%'}" ></view>
+				<view class="tab-under-line" :style="{left: (currentTabIndex*20 + 1) + '%'}" ></view>
 			</scroll-view>
-			<swiper :current="currentSectionIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
-				<template v-for="(tab, index) in sectionList">
+			<swiper :current="currentTabIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
+				<template v-for="(plan, index) in plans">
 					<swiper-item>
 						<scroll-view scroll-y="true" style="height: 100%;">
-							<bert-tag-group :chapter="tab" @changeValue="onChangeValue"></bert-tag-group>
+							<bert-tag-group :plan_id="plan.id"></bert-tag-group>
 						</scroll-view>
 					</swiper-item>
 				</template>
@@ -32,51 +33,56 @@
 </template>
 
 <script>
-	import api from "@/store/api.js"
 	import bertSwiper from "@/components/bert-swiper/bert-swiper.vue"
 	import uniSection from "@/components/uni-section/uni-section.vue"
 	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"
 	import uCharts from "@/js_sdk/u-charts/u-charts/u-charts.min.js"
+	import { mapState, mapGetters } from 'vuex'
     export default {
 	    components: {bertSwiper, bertTagGroup, uniSection, uCharts},
 		data() {
-			let sectionList = api.section.get()
 			return {
 				chart: null,
-				opts: {
-				  "series":[{
-					  "name":"完成率", "data": this.getCompletePercent(sectionList[0]),
-					  "color":"#2fc25b"},
-				],
-				},
 				swiperHeight: 100,
-				currentSectionIndex: 0,
-				sectionList: sectionList,
-				currentSection: sectionList[0]
+				currentTabIndex: 0
 			}
 		},
 	computed: {
-		totalValue() {
-			return this.sectionList.map((l) => l.totalValue).reduce((i,j) => i+j) || 0
-		},
-		currentPercent() {
-			return Number(this.getCompletePercent(this.currentSection))
+		...mapState({
+			plan: "plan",
+			count: "count"
+		}),
+		...mapGetters({
+			getTotalValue: "plan/getTotalValue",
+			getCheckedValue: "plan/getCheckedValue",
+			plans: "plan/plans"
+		}),
+		currentPlan() { return this.plans[this.currentTabIndex] },
+		currentPercent() { return this.currentPlanTotalValue == 0 ? 0 :  (100*Number(this.currentPlanCheckedValue / this.currentPlanTotalValue)).toFixed(0)  },
+		currentPlanCheckedValue() { return this.getCheckedValue({ plan_id: this.currentPlan.id }) },
+		currentPlanTotalValue() { return this.getTotalValue({ plan_id: this.currentPlan.id }) },
+		opts() {
+			return {
+				"series":[{
+					"name":"完成率", 
+					"data": this.currentPercent / 100,
+					"color":"#2fc25b"},
+				],
+			}
 		}
 	},
 	watch: {
 		currentPercent(v1, v2) {
-			this.opts.series[0].data = (v1/100).toFixed(2)
 			let newdata = this.opts
 			this.chart.updateData({
 						series: newdata.series,
 						title: {//这里的文案是自定义的，不写是不变的
 							name: v1 + '%',
 							color: newdata.series[0].color,
-							animation: false,
+							animation: true,
 							fontSize: 25
 						}
 					});
-			console.log(v1, v2)
 		}
 	},
 	onLoad() {
@@ -125,23 +131,15 @@
 			let index = e.target.current || e.detail.current;
 		    this.switchTab(index);
 		},
-		onChangeValue() {
-		},
 		ontabtap(e) {
 		    let index = e.target.dataset.current || e.currentTarget.dataset.current;
-			console.log(index)
 			this.switchTab(index);
 		},
 		switchTab(index) {
-			if (this.currentSectionIndex === index) {
+			if (this.currentTabIndex == index) {
 			    return;
 			}
-			this.currentSectionIndex = index
-			this.currentSection = this.sectionList[index]
-		},
-		getCompletePercent(section) {
-			console.log(section)
-			return (!!section.totalValue ? 100 * section.getCheckedValue() / section.totalValue : 0).toFixed()
+			this.currentTabIndex = index
 		}
     },
 	onNavigationBarButtonTap() {

@@ -1,17 +1,17 @@
 let navigator = {
-	toActivityDetail() {
+	toActivityDetail({ activity_id }) {
 		uni.navigateTo({
-			url: "/pages/activity/activity-detail"
+			url: `/pages/activity/activity-detail?activity_id=${activity_id}`
 		})
 	},
-	toActivityEdit() {
+	toActivityEdit({ type, activity_id }) {
 		uni.navigateTo({
-			url: "/pages/activity/activity-edit"
+			url: `/pages/activity/activity-edit?type=${type}&activity_id=${activity_id}`
 		})
 	},
 	toChapterEdit() {
 		uni.navigateTo({
-			url: "/pages/chapter/chapter-edit"
+			url: "/pages/plan/plan-edit"
 		})
 	}
 }
