@@ -12,7 +12,7 @@
 				</view>
 				<view class="uni-list-item__content">
 					<slot />
-					<text class="uni-list-item__content-title">{{ title }}</text>
+					<text class="uni-list-item__content-title" :style="!titleColor ? '' : {color: titleColor}">{{ title }}</text>
 					<text v-if="note" class="uni-list-item__content-note">{{ note }}</text>
 				</view>
 				<view class="uni-list-item__extra">
@@ -128,6 +128,10 @@
 						size: 20
 					}
 				}
+			},
+			titleColor: {
+				type: String,
+				default: ""
 			}
 		},
 		inject: ['list'],

@@ -3,16 +3,19 @@
 		<view class="main">
 			<scroll-view class="scroll-view_H" :show-scrollbar="false" scroll-x="true">
 				<template v-for="(plan, index) in plans">
-					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{plan.title}}</view>
+					<view :class="currentTabIndex==index ? 'scroll-view-item_H active' : 'scroll-view-item_H'" :data-current="index" @click="ontabtap">{{plan.title}}</view>
 				</template>
 				<view class="tab-under-line" :style="{left: (currentTabIndex*20 + 1) + '%'}" ></view>
+				<view class="scroll-view-item_H" :data-current="plans.length + 1">
+					<uni-icons type="plusempty" @click="addPlan"></uni-icons>
+				</view>
 			</scroll-view>
 		</view>
 		<swiper :current="currentTabIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
 			<template v-for="(plan, index) in plans">
 				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;">
-						<bert-tag-group :isEdit="true" :plan_id="plan.id"></bert-tag-group>
+					<scroll-view scroll-y="true" style="height: 100%;" key="1">
+						<bert-tag-group :isEdit="true" :planId="plan.id"></bert-tag-group>
 					</scroll-view>
 				</swiper-item>
 			</template>
@@ -21,15 +24,12 @@
 </template>
 
 <script>
-	import api from "@/api/api.js"
 	import bertSwiper from "@/components/bert-swiper/bert-swiper.vue"
-	import uniSection from "@/components/uni-section/uni-section.vue"
 	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"
-	import { mapState, mapGetters } from 'vuex'
+	import { mapState, mapGetters, mapActions } from 'vuex'
     export default {
-	    components: {bertSwiper, bertTagGroup, uniSection},
+	    components: { bertSwiper, bertTagGroup },
 		data() { 
-			let sectionList = api.section.get()
 			return {
 				swiperHeight: 100,
 				currentTabIndex: 0
@@ -37,17 +37,14 @@
 		},
 	computed: {
 		...mapState({
-			plan: "plan",
-			count: "count"
+			pageData: "pageData"
 		}),
 		...mapGetters({
 			getTotalValue: "plan/getTotalValue",
 			getCheckedValue: "plan/getCheckedValue",
-			plans: "plan/plans"
+			plans: "plan/createdPlans"
 		}),
 		currentPlan() { return this.plans[this.currentTabIndex] }
-	},
-	watch: {
 	},
 	onLoad() {
 	},
@@ -60,6 +57,15 @@
 		});
 	},
     methods:{
+		...mapActions({
+			addPlanAction: "plan/addPlan",
+			followPlan: "followPlan"
+		}),
+		addPlan() {
+			let plan = {title: "新增计划"}
+			this.addPlanAction(plan)
+			this.followPlan({ planId: plan.id })
+		},
 		ontabchange(e) {
 			let index = e.target.current || e.detail.current;
 		    this.switchTab(index);
@@ -84,5 +90,25 @@
 </script>
 
 <style>
-@import "./tabbar-1.css"
+.scroll-view_H {
+  white-space: nowrap;
+  width: 100%; }
+.scroll-view-item_H {
+  display: inline-block;
+  width: 20%;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size: 36rpx; }
+
+.tab-under-line {
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  border-bottom: 5rpx solid #007AFF;
+  width: 19%; }
+.active{
+	color: #007AFF;
+}
+
 </style>

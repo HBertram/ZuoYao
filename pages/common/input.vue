@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-page-body">
-		<evan-form class="evan-form-show" :hide-required-asterisk="true" ref="form" :model="value">
+		<evan-form class="evan-form-show" :hide-required-asterisk="true" ref="form">
 			<evan-form-item label="请输入:" prop="value" labelPosition="top">
 				<input class="form-input" placeholder-class="form-input-placeholder" v-model="value" placeholder="请输入名称" />
 			</evan-form-item>
@@ -11,12 +11,29 @@
 <script>
 	import evanForm from "@/components/evan-form/evan-form.vue"
 	import evanFormItem from "@/components/evan-form/evan-form-item.vue"
+	import { mapActions } from "vuex"
 	export default {
 		components: {evanForm, evanFormItem},
 		data() {
 			return {
-				value: ""
+				value: "",
+				type: ""
 			}
+		},
+		methods: {
+			...mapActions({
+				"editPageData": "editPageData"
+			}) 
+		},
+		onLoad({ type, value }) {
+			this.type = type
+			this.value = value || ""
+		},
+		onNavigationBarButtonTap() {
+			this.editPageData({ value: this.value, type: this.type })
+			uni.navigateBack({
+				
+			})
 		}
 	}
 </script>

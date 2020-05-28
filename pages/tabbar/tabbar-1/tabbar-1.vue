@@ -5,8 +5,16 @@
 			</view>
 			<view class="top-content">
 				<view class="top-box">
+					<view class="top-box__left">
+						<text style="color: #939393; font-size: small;">已完成</text>
+						<text style="font-size: large; font-weight: bold;">{{currentPlanCheckedValue}}分</text>
+					</view>
 					<view class="total-mark">
-						<canvas canvas-id="completePercent"></canvas>
+						<canvas canvas-id="completePercent" style="width: 100px; height: 100px"></canvas>
+					</view>
+					<view class="top-box__right">
+						<text style="color: #939393; font-size: smaller;">总共</text>
+						<text style="font-size: large; font-weight: bold;">{{currentPlanTotalValue}}分</text>
 					</view>
 				</view>
 			</view>
@@ -14,7 +22,7 @@
 		<view class="main">
 			<scroll-view class="scroll-view_H" :show-scrollbar="false" scroll-x="true">
 				<template v-for="(plan, index) in plans">
-					<view class="scroll-view-item_H" :data-current="index" @click="ontabtap">{{plan.title}}</view>
+					<view :class="currentTabIndex==index ? 'scroll-view-item_H active' : 'scroll-view-item_H'" :data-current="index" @click="ontabtap">{{plan.title}}</view>
 				</template>
 				<view class="tab-under-line" :style="{left: (currentTabIndex*20 + 1) + '%'}" ></view>
 			</scroll-view>
@@ -22,7 +30,7 @@
 				<template v-for="(plan, index) in plans">
 					<swiper-item>
 						<scroll-view scroll-y="true" style="height: 100%;">
-							<bert-tag-group :plan_id="plan.id"></bert-tag-group>
+							<bert-tag-group :planId="plan.id"></bert-tag-group>
 						</scroll-view>
 					</swiper-item>
 				</template>
@@ -59,8 +67,8 @@
 		}),
 		currentPlan() { return this.plans[this.currentTabIndex] },
 		currentPercent() { return this.currentPlanTotalValue == 0 ? 0 :  (100*Number(this.currentPlanCheckedValue / this.currentPlanTotalValue)).toFixed(0)  },
-		currentPlanCheckedValue() { return this.getCheckedValue({ plan_id: this.currentPlan.id }) },
-		currentPlanTotalValue() { return this.getTotalValue({ plan_id: this.currentPlan.id }) },
+		currentPlanCheckedValue() { return !this.currentPlan ? 0 : this.getCheckedValue({ planId: this.currentPlan.id }) },
+		currentPlanTotalValue() { return !this.currentPlan ? 0 : this.getTotalValue({ planId: this.currentPlan.id }) },
 		opts() {
 			return {
 				"series":[{
@@ -116,8 +124,8 @@
 					},
 					subtitle: {
 						name: chartData.series[0].name,
-						color: '#666666',
-						fontSize: 15
+						color: '#aaaaaa',
+						fontSize: 10
 					},
 					extra: {
 						arcbar:{
@@ -149,5 +157,86 @@
 </script>
 
 <style>
-@import "./tabbar-1.css"
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+.main {
+	padding: 10rpx;
+}
+.tabs {
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+  /* #ifdef MP-ALIPAY || MP-BAIDU */
+  height: 100vh;
+  /* #endif */ }
+
+.swiper-box {
+  flex: 1; }
+
+.bghead {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 300rpx;
+  width: 100%;
+  background-color: #66ccff;
+  z-index: -1; }
+
+.top {
+  flex-direction: column; }
+
+  .top .top-title {
+    height: 80rpx; }
+  .top .top-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; }
+    .top .top-content .top-box {
+      border: 1px solid #66ccff;
+      width: 700rpx;
+      height: 240rpx;
+      background-color: #fafeff;
+      border-radius: 15rpx;
+      display: flex;
+      justify-content: space-around; }
+	  .top-box__left, .top-box__right {
+		  flex: 1;
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  text-align: center;
+	  }
+      .top .top-content .top-box .total-mark {
+        margin-top: 25rpx; }
+      .top .top-content .top-box .total-mark-label {
+		  flex: 1;
+        text-align: center;
+        line-height: 40rpx;
+        font-size: 25rpx;
+        color: #212121; }
+
+.scroll-view_H {
+  white-space: nowrap;
+  width: 100%; }
+
+.scroll-view-item_H {
+  display: inline-block;
+  width: 20%;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size: 36rpx; }
+
+.tab-under-line {
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  border-bottom: 5rpx solid #007AFF;
+  width: 19%; }
+.active{
+	color: #007AFF;
+}
 </style>

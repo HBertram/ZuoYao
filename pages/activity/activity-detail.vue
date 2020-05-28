@@ -31,7 +31,6 @@
 </template>
 
 <script>
-	import uniIcons from "../../components/uni-icons/uni-icons.vue"
 	import { mapState, mapGetters, mapActions } from 'vuex'
 	export default {
 		data() {

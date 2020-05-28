@@ -1,8 +1,17 @@
 <script>
+	import { mapState } from "vuex"
 export default {
+	computed: {
+		...mapState (["hasLogin"])
+	},
 	onLaunch: function() {
+		console.log(this.hasLogin)
+		if ( !this.hasLogin ) {
+			uni.reLaunch({
+				url: "pages/login/login"
+			})
+		}
 		console.log('App Launch');
-
 		setTimeout(() => {
 			uni.setTabBarBadge({
 				index: 1,
@@ -23,6 +32,7 @@ export default {
 </script>
 
 <style>
-/*每个页面公共css */ 
-@import url("/common/uni.css");
+/* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
+@import '/common/uni.css';
+@import '/common/common.css';
 </style>

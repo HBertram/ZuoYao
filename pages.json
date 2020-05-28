@@ -5,7 +5,7 @@
 			"path": "pages/tabbar/tabbar-1/tabbar-1",
 			"style": {
 				"navigationBarBackgroundColor": "#66ccff",
-				"navigationBarTitleText": "uni-app",
+				"navigationBarTitleText": "今日任务",
 				"app-plus": {
 					"titleNView": {
 						"titleColor": "#ffffff",
@@ -18,8 +18,17 @@
 			}
 		},
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarBackgroundColor": "#1b6cda",
+				"navigationBarTitleText": ""
+			}
+		},
+		{
 			"path": "pages/tabbar/tabbar-2/tabbar-2",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true
+			}
 		},
 		{
 			"path": "pages/tabbar/tabbar-3/tabbar-3",
@@ -83,18 +92,7 @@
 		},
 		{
 			"path": "pages/plan/plan-edit",
-			"style": {
-				"navigationBarBackgroundColor": "#66ccff",
-				"navigationBarTitleText": "uni-app",
-				"app-plus": {
-					"titleNView": {
-						"titleColor": "#ffffff",
-						"buttons": [{
-							"fontSize":"large",
-							"text": "OK"
-						}]
-					}
-				}
+			"style": { 
 			}
 		}
 	],
@@ -113,29 +111,14 @@
 				"pagePath": "pages/tabbar/tabbar-1/tabbar-1",
 				"iconPath": "static/img/tabbar/home.png",
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
-				"text": "首页"
+				"text": "计划"
 			},
 			{
 				"pagePath": "pages/tabbar/tabbar-2/tabbar-2",
 				"iconPath": "static/img/tabbar/guanzhu.png",
 				"selectedIconPath": "static/img/tabbar/guanzhuactive.png",
-				"text": "关注"
+				"text": "市场"
 			},
-			//#ifdef MP-WEIXIN
-			{
-				"pagePath": "pages/tabbar/tabbar-3/tabbar-3",
-				"iconPath": "static/img/tabbar/add.png",
-				"selectedIconPath": "static/img/tabbar/addactive.png",
-				"text": "发布"
-			},
-			//#endif
-			//#ifndef MP-WEIXIN
-			{
-				"pagePath": "pages/tabbar/tabbar-3/tabbar-3",
-				"iconPath": "static/img/tabbar/add.png",
-				"selectedIconPath": "static/img/tabbar/addactive.png"
-			},
-			//#endif
 			{
 				"pagePath": "pages/tabbar/tabbar-4/tabbar-4",
 				"iconPath": "static/img/tabbar/news.png",
@@ -146,7 +129,7 @@
 				"pagePath": "pages/tabbar/tabbar-5/tabbar-5",
 				"iconPath": "static/img/tabbar/me.png",
 				"selectedIconPath": "static/img/tabbar/meactive.png",
-				"text": "我"
+				"text": "我的"
 			}
 		]
 	}

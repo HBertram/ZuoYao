@@ -27,11 +27,12 @@
 			return {
 				type: "",
 				activity: {
+					id: 0,
+					taskId: 0,
 					name: "",
 					value: 0,
 					attention: "",
-					description: "",
-					phone: ""
+					description: ""
 				}
 			}
 		},
@@ -42,22 +43,48 @@
 		},
 		methods: {
 			...mapActions({
-				editActivity: "activity/editActivity"
+				editActivity: "activity/editActivity",
+				addActivity: "activity/addActivity"
 			})
 		},
-		onLoad({ type, activity_id }) {
+		onLoad({ type, activity_id, taskId }) {
+			this.type = type
 			if (type == "edit") {
-				this.type = type
 				Object.assign(this.activity, this.getActivity({ id: activity_id }))
+			} else if ( type == "add" ) {
+				this.activity.taskId = taskId
 			}
 		},
 		onNavigationBarButtonTap() {
 			if (this.type == "edit") {
 				this.editActivity(this.activity).then(() => {
+					uni.showToast({
+						title: "修改成功",
+						position:'bottom',
+						success() {
+							setTimeout(() => {
+								uni.navigateBack({
+									
+								})
+							}, 1500)
+						}
+					})
 					
 				})
-				uni.navigateBack({
-					
+			}
+			if (this.type == "add") {
+				this.addActivity(this.activity).then(() => {
+					uni.showToast({
+						title: "保存成功",
+						position:'bottom',
+						success() {
+							setTimeout(() => {
+								uni.navigateBack({
+									
+								})
+							}, 1500)
+						}
+					})
 				})
 			}
 		}
