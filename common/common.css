@@ -1,0 +1,14 @@
+.bert-btn {
+	background-color: #f9f9f9;
+	font-size: 20rpx;
+	line-height: 60rpx;
+	height: 60rpx;
+	border-radius: 30rpx;
+	color: #636363;
+	border: 1rpx solid #bcbcbc;
+	margin: 5rpx 10rpx;
+	padding: 0 20rpx;
+}
+.bert-btn-hover {
+	background-color: #e2e2e2;
+}

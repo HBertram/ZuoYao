@@ -1,0 +1,25 @@
+{
+  "name": "zuoyao",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "async-validator": "^3.3.0",
+    "axios": "^0.19.2",
+    "vuex-persistedstate": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HBertram/ZuoYao.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HBertram/ZuoYao/issues"
+  },
+  "homepage": "https://github.com/HBertram/ZuoYao#readme"
+}
