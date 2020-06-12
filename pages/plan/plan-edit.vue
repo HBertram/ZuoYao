@@ -15,7 +15,7 @@
 			<template v-for="(plan, index) in plans">
 				<swiper-item>
 					<scroll-view scroll-y="true" style="height: 100%;" key="1">
-						<bert-tag-group :isEdit="true" :planId="plan.id"></bert-tag-group>
+						<bert-tag-group @removed="plans.splice(plans.indexOf(plan), 1)" :isEdit="true" :plan="plan"></bert-tag-group>
 					</scroll-view>
 				</swiper-item>
 			</template>
@@ -25,14 +25,15 @@
 
 <script>
 	import bertSwiper from "@/components/bert-swiper/bert-swiper.vue"
-	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group.vue"
+	import bertTagGroup from "@/components/bert-tag-group/bert-tag-group-edit.vue"
 	import { mapState, mapGetters, mapActions } from 'vuex'
     export default {
 	    components: { bertSwiper, bertTagGroup },
 		data() { 
 			return {
 				swiperHeight: 100,
-				currentTabIndex: 0
+				currentTabIndex: 0,
+				plans: []
 			}
 		},
 	computed: {
@@ -42,11 +43,11 @@
 		...mapGetters({
 			getTotalValue: "plan/getTotalValue",
 			getCheckedValue: "plan/getCheckedValue",
-			plans: "plan/createdPlans"
 		}),
 		currentPlan() { return this.plans[this.currentTabIndex] }
 	},
-	onLoad() {
+	onShow() {
+		this.loadPlans()
 	},
 	onReady() {
 		let that = this
@@ -58,13 +59,19 @@
 	},
     methods:{
 		...mapActions({
-			addPlanAction: "plan/addPlan",
 			followPlan: "followPlan"
 		}),
+		loadPlans() {
+			this.api.getPlans().then(r => {
+				this.$set(this, "plans", r)
+			})
+		},
 		addPlan() {
 			let plan = {title: "新增计划"}
-			this.addPlanAction(plan)
-			this.followPlan({ planId: plan.id })
+			this.api.savePlan(plan).then(r=> {
+				this.followPlan({ planId: r.id })
+				this.loadPlans()
+			})
 		},
 		ontabchange(e) {
 			let index = e.target.current || e.detail.current;

@@ -1,18 +1,7 @@
 <template>
   <view>
 	<view style="padding: 10rpx">
-		<view v-if="isEdit">
-			<uni-section class="section" title="计划信息" type="line"></uni-section>
-			<uni-list>
-				<uni-list-item title="名称" @click="toInputPage({ type: 'bert-tag-group/plan_title', value: plan.title })" :rightText="plan.title"></uni-list-item>
-				<uni-list-item title="描述" :rightText="plan.description" @click="toInputPage({ type: 'bert-tag-group/plan_description', value: plan.description })"></uni-list-item>
-				<uni-list-item title="注意事项" :rightText="plan.attention" @click="toInputPage({ type: 'bert-tag-group/plan_attention', value: plan.attention })"></uni-list-item>
-				<uni-section class="section" title="操作" type="line"></uni-section>
-					<uni-list-item title="删除计划" titleColor="red" @click="deletePlan"></uni-list-item>
-					<uni-list-item title="同步到服务器" @click="uploadToServer"></uni-list-item>
-				</uni-list>
-		</view>
-		<view v-else>
+		<view>
 			<view class="form-item uni-flex">
 				<view class="form-label">描述</view>
 				<text class="form-value">{{plan.description}}</text>
@@ -27,27 +16,19 @@
 		<template v-for="(task, groupIndex) in plan.tasks">
 			<view :key="task.id">
 			  <uni-section class="section" v-show="showSection" :title="task.name" type="line">
-				  <uni-icons v-if="isEdit" @click="deleteTask(task)" color="#ff4a4a" size="25" type="closeempty"></uni-icons>
 			  </uni-section>
 			  <checkbox-group class="content">
 					<template v-for="(item, index) in task.activities">
-						<view :key="item.id" :class="item.checked && !isEdit ?  'activity-item selectBox' : 'activity-item '">
-							<checkbox :checked="item.checked" v-show="false"/>
+						<view :key="item.id" :class="item.active.checked ? 'activity-item selectBox' : 'activity-item'">
+							<checkbox :checked="item.active.checked" v-show="false"/>
 							<text @longpress="showDetail(item)" @click="onActivityClick(item)" :key="index" >  
 								{{item.name}}
 							</text>
-							<uni-icons v-if="isEdit" @click="deleteActivity(item)" class="delete-icon" type="closeempty"></uni-icons>
 						</view>
 					</template>
-					<view v-if="isEdit" class="add-activity-button" @click="addActivity(task)">
-						<uni-icons color="#eb5248" size="20" type="plusempty"></uni-icons>
-					</view>
 			  </checkbox-group>
 			</view>
 		</template>
-		<uni-section v-if="isEdit" class="section" v-show="showSection" title="新增" type="line">
-			<uni-icons @click="addTask(plan)" color="#55aaff" size="25" type="plusempty"></uni-icons>
-		</uni-section>
 	</view>
   </view>
 </template>
@@ -62,11 +43,6 @@
   export default {
 	  components: { evanForm, evanFormItem, uniDrawer },
 	  props: {
-		  isEdit: {
-			  type: Boolean,
-			  required: false,
-			  default: false
-		  },
 		  showSection: {
 			  type: Boolean,
 			  required: false,
@@ -82,8 +58,8 @@
 			  required: false,
 			  default: "default"
 		  },
-		  planId: {
-			  type: [ Number, String ],
+		  plan: {
+			  type: Object,
 			  required: true
 		  }
 	  },
@@ -99,9 +75,8 @@
     },
 	computed: {
 		...mapState([
-			"pageData"
-		]),
-		plan() { return this.$store.getters["plan/getPlan"]({ planId: this.planId }) }
+			"pageData", "userInfo"
+		])
 	},
 	watch: {
 		pageData(v1, v2) {
@@ -111,15 +86,24 @@
 				this.emptyPageData()
 				if ( type == "bert-tag-group/add_task_name" ) {
 					this.addTaskAction({
-						planId: this.planId,
+						planId: this.plan.id,
 						name: value
 					})
 				} else if ( type == "bert-tag-group/plan_title" ) {
-					this.editPlanAction({ id: this.planId, title: value })
+					this.plan.title = value
+					let obj = Object.assign({}, this.plan)
+					obj.tasks = []
+					this.api.savePlan(obj)
 				} else if ( type == "bert-tag-group/plan_description" ) {
-					this.editPlanAction({ id: this.planId, description: value })
+					this.plan.description = value
+					let obj = Object.assign({}, this.plan)
+					obj.tasks = []
+					this.api.savePlan(obj)
 				} else if ( type == "bert-tag-group/plan_attention" ) {
-					this.editPlanAction({ id: this.planId, attention: value })
+					this.plan.attention = value
+					let obj = Object.assign({}, this.plan)
+					obj.tasks = []
+					this.api.savePlan(obj)
 				}
 				this.isWait = false
 			}
@@ -132,7 +116,6 @@
 			"addTaskAction": "task/addTask",
 			"deleteTaskAction": "task/deleteTask",
 			"emptyPageData": "emptyPageData",
-			"editPlanAction": "plan/editPlan",
 			"deletePlanAction": "plan/deletePlan"
 		}),
 		deleteTask(task) {
@@ -184,29 +167,20 @@
 			    }
 			});
 	    },
-		addActivity(task) {
-			this.navigator.toActivityEdit({ type: "add", taskId: task.id })
-		},
 		async onActivityClick(item) {
-			if (this.isEdit) {
-				this.navigator.toActivityEdit({ type: "edit", activity_id: item.id })
-			} else {
-				this.setActivityCheckState({ date: "2020-05-14", id: item.id, checked: !item.checked })
-			}
+			this.api.setActive(Object.assign(item.active, {
+				year: 2020, 
+				month: 5, 
+				day: 20, 
+				activityId: item.id, 
+				checked: !item.active.checked, 
+				userId: this.userInfo.id
+			}))
 		},
 		showDetail(item) {
 			this.navigator.toActivityDetail({ activity_id: item.id })
 		},
-		uploadToServer() {
-			this.api.savePlan(this.plan).then((r) => {
-				uni.showToast({
-					icon: "none",
-					title: "保存成功"
-				})
-			}, r => {console.log("rejected")})
-		},
       labelBtn(e) {
-		  console.log(e)
 		this.$emit("changeValue")
 	  },
 	  getTotalValue() {

@@ -1,38 +1,28 @@
-export default [
-		{
-			name: "getPlan",
-			urlFunc: ({ id }) => {
-				return `plan/${ id }`
-			},
-			method: "get"
+import activityApi from "./apis/api_activity.js"
+import planApi from "./apis/api_plan.js"
+import taskApi from "./apis/api_task.js"
+export default {
+	...activityApi,
+	...planApi,
+	...taskApi,
+	login: {
+		url: "user_auth/",
+		method: "post"
+	},
+	setActive: {
+		url: "active/",
+		method: "post"
+	},
+	getActives: {
+		urlFunc: ({ userId, year, month, day }) => {
+			return `actives/${ userId }/${ year }/${ month }/${ day }`
 		},
-		{
-			name: "getPlans",
-			url: "plans/",
-			method: "get"
+		method: "get"
+	},
+	getLatestVersion: {
+		urlFunc: ({ appid, currentAppVersion }) => {
+			return `checkversion/${ appid }/${ currentAppVersion }`
 		},
-		{
-			name: "savePlan",
-			url: "plan/",
-			method: "post"
-		},
-		{
-			name: "followPlan",
-			urlFunc: ({ user, planId }) => {
-				return `user/${ user }/${ planId }`
-			},
-			method: "post"
-		},
-		{
-			name: "cancelPlan",
-			urlFunc: ({ user, planId }) => {
-				return `user/${ user }/${ planId }`
-			},
-			method: "delete"
-		},
-		{
-			name: "login",
-			url: "user_auth/",
-			method: "post"
-		}
-	]
+		method: "get"
+	}
+}

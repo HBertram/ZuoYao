@@ -12,4 +12,24 @@ export function uuid() {
     return uuid;
 }
 
+export function getPlanValue(plan) {
+	let value = 0
+	plan.task && plan.task.forEach(t => {
+		t.activities && t.activities.forEach(a => {
+			value += a.value
+		})
+	})
+	return value
+}
+
+export function getPlanCheckedValue(plan) {
+	let value = 0
+	plan.task && plan.task.forEach(t => {
+		t.activities && t.activities.forEach(a => {
+			a.checked ? value += a.value : undefined
+		})
+	})
+	return value
+}
+
 

@@ -1,11 +1,17 @@
 <script>
-	import { mapState } from "vuex"
+	const currentAppVersion = "0.0.1"
+	
+	import { mapState, mapMutations } from "vuex"
+	import store from "./store/index.js"
 export default {
 	computed: {
 		...mapState (["hasLogin"])
 	},
+	methods: {
+		
+	},
 	onLaunch: function() {
-		console.log(this.hasLogin)
+
 		if ( !this.hasLogin ) {
 			uni.reLaunch({
 				url: "pages/login/login"

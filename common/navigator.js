@@ -1,7 +1,7 @@
 let navigator = {
 	toMain() {
 		uni.reLaunch({
-			url: "/pages/tabbar/tabbar-1/tabbar-1"
+			url: "/pages/home/home"
 		})
 	},
 	toActivityDetail({ activity_id }) {
@@ -32,7 +32,7 @@ let navigator = {
 function parseParam(obj) {
 	let lst = []
 	for (let key in obj) {
-		lst.push(`${key}=${obj[key]}`)
+		if (!!obj[key]) lst.push(`${key}=${obj[key]}`)
 	}
 	return lst.join("&")
 }

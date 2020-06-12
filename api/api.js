@@ -3,9 +3,7 @@ import qs from 'qs';
 import apis from "./apisToRegister"
 const API_URL = "http://139.9.200.212:8079/api"
 //const API_URL = "http://localhost:8079/api"
-
-
-
+//const API_URL = "http://192.168.42.120:8079/api"
 const http = axios.create({
 	  baseURL: API_URL,
 	  timeout: 5000
@@ -20,7 +18,9 @@ let isloading = true;
 
 function registerApis(apis) {
 	let api = {}
-	for (let apiConfig of apis) {
+	for (let apiName in apis) {
+		let apiConfig = apis[apiName]
+		apiConfig.name = apiName
 		if (!apiConfig.name || (!apiConfig.url && !apiConfig.urlFunc)) {
 			console.error("api/registerApis ERROR: apiConfig must contains property name and property url")
 			continue
@@ -30,13 +30,13 @@ function registerApis(apis) {
 			if ( typeof(config.urlFunc) == "function" ) {
 				config.url = config.urlFunc(param)
 			}
+			let fullUrl = `${API_URL}/${config.url}`
+			config.url = fullUrl
 			if (config.method.toUpperCase() == "POST") {
 				config.data = param
 			} else {
 				config.param = param
 			}
-			let fullUrl = `${API_URL}/${config.url}`
-			config.url = fullUrl
 			if ( config.isloading !== false ) {
 				isloading = true
 				uni.showLoading()
@@ -50,6 +50,7 @@ function registerApis(apis) {
 					let res =  data[1].data
 					
 					if (res.code == 0) {
+						console.log(`${config.method} - ${fullUrl} success`)
 						resolve(res.data)
 						return 1
 					} else {

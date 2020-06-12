@@ -36,53 +36,46 @@
 				}
 			}
 		},
-		computed: {
-			...mapGetters({
-				getActivity: "activity/getActivity"
-			})
-		},
 		methods: {
-			...mapActions({
-				editActivity: "activity/editActivity",
-				addActivity: "activity/addActivity"
-			})
+			getActivity() {
+				
+			}
 		},
 		onLoad({ type, activity_id, taskId }) {
 			this.type = type
 			if (type == "edit") {
-				Object.assign(this.activity, this.getActivity({ id: activity_id }))
+				this.api.getActivity({ id: activity_id }).then(r => {
+					Object.assign(this.activity, r)
+				})
 			} else if ( type == "add" ) {
 				this.activity.taskId = taskId
 			}
 		},
 		onNavigationBarButtonTap() {
 			if (this.type == "edit") {
-				this.editActivity(this.activity).then(() => {
+				this.api.saveActivity(this.activity).then(() => {
 					uni.showToast({
 						title: "修改成功",
 						position:'bottom',
 						success() {
-							setTimeout(() => {
-								uni.navigateBack({
-									
-								})
-							}, 1500)
+							uni.navigateBack({
+								
+							})
 						}
 					})
 					
 				})
 			}
 			if (this.type == "add") {
-				this.addActivity(this.activity).then(() => {
+				this.api.addActivity(this.activity).then((r) => {
+					console.log(r)
 					uni.showToast({
 						title: "保存成功",
 						position:'bottom',
 						success() {
-							setTimeout(() => {
-								uni.navigateBack({
-									
-								})
-							}, 1500)
+							uni.navigateBack({
+								
+							})
 						}
 					})
 				})

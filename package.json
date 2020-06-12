@@ -6,6 +6,8 @@
   "dependencies": {
     "async-validator": "^3.3.0",
     "axios": "^0.19.2",
+    "sass": "^1.26.8",
+    "sass-loader": "^8.0.2",
     "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {},
