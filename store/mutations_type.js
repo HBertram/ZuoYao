@@ -1,10 +1,8 @@
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
-
-
+export const SET_USERINFO = 'SET_USERINFO'
+export const SET_USERTOKEN = 'SET_USERTOKEN'
 export const EDIT_PAGEDATA = 'EDIT_PAGEDATA'
 export const EMPTY_PAGEDATA = 'EMPTY_PAGEDATA'
-
-export const USER_FOLLOW_PLAN = "USER_FOLLOW_PLAN"
-export const USER_CANCEL_PLAN = "USER_CANCEL_PLAN"
+export const SET_VERSIONINFO = 'SET_VERSIONINFO'
 

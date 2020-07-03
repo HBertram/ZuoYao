@@ -43,6 +43,18 @@
   export default {
 	  components: { evanForm, evanFormItem, uniDrawer },
 	  props: {
+		  year: {
+			  type: Number,
+			  default: new Date().getYear() + 1900
+		  },
+		  month: {
+			  type: Number,
+			  default: new Date().getMonth() + 1
+		  },
+		  day: {
+			  type: Number,
+			  default: new Date().getDate(), 
+		  },
 		  showSection: {
 			  type: Boolean,
 			  required: false,
@@ -78,45 +90,8 @@
 			"pageData", "userInfo"
 		])
 	},
-	watch: {
-		pageData(v1, v2) {
-			if (this.isWait && !!this.pageData.type) {
-				let type = this.pageData.type
-				let value = this.pageData.value
-				this.emptyPageData()
-				if ( type == "bert-tag-group/add_task_name" ) {
-					this.addTaskAction({
-						planId: this.plan.id,
-						name: value
-					})
-				} else if ( type == "bert-tag-group/plan_title" ) {
-					this.plan.title = value
-					let obj = Object.assign({}, this.plan)
-					obj.tasks = []
-					this.api.savePlan(obj)
-				} else if ( type == "bert-tag-group/plan_description" ) {
-					this.plan.description = value
-					let obj = Object.assign({}, this.plan)
-					obj.tasks = []
-					this.api.savePlan(obj)
-				} else if ( type == "bert-tag-group/plan_attention" ) {
-					this.plan.attention = value
-					let obj = Object.assign({}, this.plan)
-					obj.tasks = []
-					this.api.savePlan(obj)
-				}
-				this.isWait = false
-			}
-		}
-	},
     methods:{
 		...mapActions({
-			"setActivityCheckState": "active/setActivityCheckState",
-			"deleteActivityAction": "activity/deleteActivity",
-			"addTaskAction": "task/addTask",
-			"deleteTaskAction": "task/deleteTask",
-			"emptyPageData": "emptyPageData",
-			"deletePlanAction": "plan/deletePlan"
 		}),
 		deleteTask(task) {
 			uni.showModal({
@@ -132,46 +107,11 @@
 				}
 			});
 		},
-		deletePlan() {
-			uni.showModal({
-				title: '删除确认',
-				content: `确定删除计划 - (${this.plan.title}) 吗?`,
-				showCancel: true,
-				cancelText: '取消',
-				confirmText: '确定',
-				success: res => {
-					if(res.confirm) {
-						this.deletePlanAction(this.plan)
-					}
-				}
-			});
-		},
-		toInputPage(param) {
-			this.isWait = true
-			this.navigator.toInput(param)
-		},
-		addTask(plan) {
-			this.toInputPage({ type: "bert-tag-group/add_task_name" })
-		},
-	    deleteActivity(item) {
-			let that = this
-			uni.showModal({
-			    title: '提示',
-			    content: '确定删除该项吗',
-				confirmText: "删除",
-			    success: function (res) {
-			        if (res.confirm) {
-						that.deleteActivityAction(item)
-			        } else if (res.cancel) {
-			        }
-			    }
-			});
-	    },
 		async onActivityClick(item) {
 			this.api.setActive(Object.assign(item.active, {
-				year: 2020, 
-				month: 5, 
-				day: 20, 
+				year: this.year, 
+				month: this.month, 
+				day: this.day, 
 				activityId: item.id, 
 				checked: !item.active.checked, 
 				userId: this.userInfo.id

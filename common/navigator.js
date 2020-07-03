@@ -1,7 +1,17 @@
 let navigator = {
+	back() {
+		uni.navigateBack({
+			
+		})
+	},
 	toMain() {
 		uni.reLaunch({
 			url: "/pages/home/home"
+		})
+	},
+	toUpdate(param) {
+		uni.navigateTo({
+			url: `/pages/update/update?${parseParam(param)}`
 		})
 	},
 	toActivityDetail({ activity_id }) {
@@ -17,14 +27,20 @@ let navigator = {
 			}
 		})
 	},
-	toChapterEdit() {
+	toChapterEdit(planId) {
 		uni.navigateTo({
-			url: "/pages/plan/plan-edit"
+			url: "/pages/plan/plan-edit?planId=" + planId
 		})
 	},
 	toInput(param) {
 		uni.navigateTo({
 			url: `/pages/common/input?${parseParam(param)}`
+			
+		})
+	},
+	toSuggestion() {
+		uni.navigateTo({
+			url: `/pages/suggestion/suggestion`
 		})
 	}
 }

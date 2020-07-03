@@ -1,25 +1,6 @@
 <template>
 	<view class="container" style="width: 100%;">
-		<view class="main">
-			<scroll-view class="scroll-view_H" :show-scrollbar="false" scroll-x="true">
-				<template v-for="(plan, index) in plans">
-					<view :class="currentTabIndex==index ? 'scroll-view-item_H active' : 'scroll-view-item_H'" :data-current="index" @click="ontabtap">{{plan.title}}</view>
-				</template>
-				<view class="tab-under-line" :style="{left: (currentTabIndex*20 + 1) + '%'}" ></view>
-				<view class="scroll-view-item_H" :data-current="plans.length + 1">
-					<uni-icons type="plusempty" @click="addPlan"></uni-icons>
-				</view>
-			</scroll-view>
-		</view>
-		<swiper :current="currentTabIndex" class="swiper" :duration="300" :style="{height: swiperHeight + 'px'}" @change="ontabchange">
-			<template v-for="(plan, index) in plans">
-				<swiper-item>
-					<scroll-view scroll-y="true" style="height: 100%;" key="1">
-						<bert-tag-group @removed="plans.splice(plans.indexOf(plan), 1)" :isEdit="true" :plan="plan"></bert-tag-group>
-					</scroll-view>
-				</swiper-item>
-			</template>
-		</swiper>
+		<bert-tag-group :plan="plan"></bert-tag-group>
 	</view>
 </template>
 
@@ -31,9 +12,8 @@
 	    components: { bertSwiper, bertTagGroup },
 		data() { 
 			return {
-				swiperHeight: 100,
-				currentTabIndex: 0,
-				plans: []
+				planId: 0,
+				plan: {}
 			}
 		},
 	computed: {
@@ -47,23 +27,18 @@
 		currentPlan() { return this.plans[this.currentTabIndex] }
 	},
 	onShow() {
-		this.loadPlans()
+		this.loadPlan()
 	},
-	onReady() {
-		let that = this
-		uni.getSystemInfo({
-			success: function (res) {
-				that.swiperHeight = res.windowHeight - 73
-			} 
-		});
+	onLoad({ planId }) {
+		this.planId = planId
 	},
     methods:{
 		...mapActions({
 			followPlan: "followPlan"
 		}),
-		loadPlans() {
-			this.api.getPlans().then(r => {
-				this.$set(this, "plans", r)
+		loadPlan() {
+			this.api.getPlan({ id: this.planId }).then(r => {
+				this.$set(this, "plan", r)
 			})
 		},
 		addPlan() {
@@ -72,20 +47,6 @@
 				this.followPlan({ planId: r.id })
 				this.loadPlans()
 			})
-		},
-		ontabchange(e) {
-			let index = e.target.current || e.detail.current;
-		    this.switchTab(index);
-		},
-		ontabtap(e) {
-		    let index = e.target.dataset.current || e.currentTarget.dataset.current;
-			this.switchTab(index);
-		},
-		switchTab(index) {
-			if (this.currentTabIndex == index) {
-			    return;
-			}
-			this.currentTabIndex = index
 		}
     },
 	onNavigationBarButtonTap() {

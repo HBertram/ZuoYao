@@ -6,16 +6,16 @@ export default {
 	...planApi,
 	...taskApi,
 	login: {
-		url: "user_auth/",
+		url: "login",
 		method: "post"
 	},
 	setActive: {
-		url: "active/",
+		url: "active",
 		method: "post"
 	},
 	getActives: {
-		urlFunc: ({ userId, year, month, day }) => {
-			return `actives/${ userId }/${ year }/${ month }/${ day }`
+		urlFunc: ({ userId, year, month, date }) => {
+			return `actives/${ userId }/${ year }/${ month }/${ date }`
 		},
 		method: "get"
 	},
@@ -24,5 +24,15 @@ export default {
 			return `checkversion/${ appid }/${ currentAppVersion }`
 		},
 		method: "get"
+	},
+	getUserInfoByToken: {
+		urlFunc: (token) => {
+			return `user?token=${ token }`
+		},
+		method: "get"
+	},
+	suggestion: {
+		url: "suggestion",
+		method: "post"
 	}
 }

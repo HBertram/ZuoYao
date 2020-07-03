@@ -3,13 +3,14 @@ import App from './App'
 import navigator from "common/navigator.js"
 import api from "api/api.js"
 import store from "store/index.js"
+import uView from "uview-ui";
+Vue.use(uView);
 Vue.config.productionTip = false
 
+Vue.prototype.api = api
+Vue.prototype.navigator = navigator
 
 App.mpType = 'app'
-
-Vue.prototype.navigator = navigator
-Vue.prototype.api = api
 
 const app = new Vue({
     ...App,

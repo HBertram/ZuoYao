@@ -102,16 +102,14 @@
 					}
 				};
 				this.login(data).then((data) => {
-					let userInfo = data
-					if(!userInfo) {
-						uni.showToast({
-							position: "bottom",
-							icon: 'none',
-							title: '用户或密码不正确',
-						});
-					} else {
-						this.toMain();
-					}
+					this.getUserInfo();
+					this.toMain();
+				}).catch((r) => {
+					uni.showToast({
+						position: "bottom",
+						icon: 'none',
+						title: '用户或密码不正确',
+					});
 				})
 			},
 			oauth(value) {

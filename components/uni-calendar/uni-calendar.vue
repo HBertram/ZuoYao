@@ -11,16 +11,25 @@
 				</view>
 			</view>
 			<view class="uni-calendar__header">
-				<view class="uni-calendar__header-btn-box" @click="pre">
+				<view v-if="brief" class="uni-calendar__header-btn-box" @click="preDay">
 					<view class="uni-calendar__header-btn uni-calendar--left"></view>
 				</view>
-				<text class="uni-calendar__header-text">{{ (nowDate.year||'') +'年'+( nowDate.month||'') +'月'}}</text>
-				<view class="uni-calendar__header-btn-box" @click="next">
+				<view v-else class="uni-calendar__header-btn-box" @click="pre">
+					<view class="uni-calendar__header-btn uni-calendar--left"></view>
+				</view>
+				<text class="uni-calendar__header-text">{{ (nowDate.year||'') +'年'+( nowDate.month||'') +'月'+( nowDate.date||'') +'日'}}</text>
+				<view v-if="brief" class="uni-calendar__header-btn-box" @click="nextDay">
+					<view class="uni-calendar__header-btn uni-calendar--right"></view>
+				</view>		
+				<view v-else class="uni-calendar__header-btn-box" @click="next">
 					<view class="uni-calendar__header-btn uni-calendar--right"></view>
 				</view>
-				<text class="uni-calendar__backtoday" @click="backtoday">回到今天</text>
+				<view class="uni-calendar__showbrief">
+					<uni-icons v-if="brief" type="arrowdown" @click="brief = !brief"></uni-icons>
+					<uni-icons v-else type="arrowup" @click="brief = !brief"></uni-icons>
+				</view>
 			</view>
-			<view class="uni-calendar__box">
+			<view :class="(brief ? 'uni-calendar__box-hide' : 'uni-calendar__box-show') + ' uni-calendar__box'">
 				<view v-if="showMonth" class="uni-calendar__box-bg">
 					<text class="uni-calendar__box-bg-text">{{nowDate.month}}</text>
 				</view>
@@ -116,11 +125,12 @@
 			},
 			showMonth: {
 				type: Boolean,
-				default: true
+				default: false
 			}
 		},
 		data() {
 			return {
+				brief: true,
 				show: false,
 				weeks: [],
 				calendar: {},
@@ -211,6 +221,7 @@
 				// 设置多选
 				this.cale.setMultiple(this.calendar.fullDate)
 				this.weeks = this.cale.weeks
+				this.setDate(this.calendar.fullDate)
 				this.change()
 			},
 			backtoday() {
@@ -223,12 +234,29 @@
 				const preDate = this.cale.getDate(this.nowDate.fullDate, -1, 'month').fullDate
 				this.setDate(preDate)
 				this.monthSwitch()
-
 			},
 			next() {
 				const nextDate = this.cale.getDate(this.nowDate.fullDate, +1, 'month').fullDate
 				this.setDate(nextDate)
 				this.monthSwitch()
+			},
+			preDay() {
+				const preDate = this.cale.getDate(this.nowDate.fullDate, -1, 'day')
+				this.calendar = preDate
+				// 设置多选
+				this.cale.setMultiple(this.calendar.fullDate)
+				this.weeks = this.cale.weeks
+				this.setDate(this.calendar.fullDate)
+				this.change()
+			},
+			nextDay() {
+				const nextDate = this.cale.getDate(this.nowDate.fullDate, +1, 'day')
+				this.calendar = nextDate
+				// 设置多选
+				this.cale.setMultiple(this.calendar.fullDate)
+				this.weeks = this.cale.weeks
+				this.setDate(this.calendar.fullDate)
+				this.change()
 			},
 			setDate(date) {
 				this.cale.setDate(date)
@@ -317,7 +345,19 @@
 		/* padding: 0 15px;
  */
 	}
-
+	.uni-calendar__showbrief {
+		position: absolute;
+		right: 10rpx;
+		top: 25rpx;
+		padding: 0 5px;
+		padding-left: 10px;
+		height: 25px;
+		line-height: 25px;
+		font-size: 12px;
+		border-top-left-radius: 25px;
+		border-bottom-left-radius: 25px;
+		color: #333;
+	}
 	.uni-calendar__backtoday {
 		position: absolute;
 		right: 0;
@@ -335,7 +375,7 @@
 
 	.uni-calendar__header-text {
 		text-align: center;
-		width: 100px;
+		width: 120px;
 		font-size: 28rpx;
 		color: #333;
 	}
@@ -427,5 +467,16 @@
 		/* #ifndef APP-NVUE */
 		line-height: 1;
 		/* #endif */
+	}
+	
+	.uni-calendar__box-show {
+		overflow: hidden;
+		height: 350px;
+		transition: all 0.7s cubic-bezier(0.25, 1.0, 0.25, 1.0);
+	}
+	.uni-calendar__box-hide {
+		overflow: hidden;
+		height: 0;
+		transition: all 0.7s cubic-bezier(0.25, 1.0, 0.25, 1.0);
 	}
 </style>

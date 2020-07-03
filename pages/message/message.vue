@@ -109,9 +109,6 @@ export default {
 
 <style lang="scss" scoped>
 .content {
-$u-main-color: #787878;
-$u-light-color: #aaaaff;
-$u-tips-color: #ffaaff;
 	.item {
 		width: 750rpx;
 		display: flex;

@@ -1,8 +1,14 @@
 import axios from 'axios';  
-import qs from 'qs';  
 import apis from "./apisToRegister"
+// #ifdef APP-PLUS
 const API_URL = "http://139.9.200.212:8079/api"
+// #endif
+// #ifndef APP-PLUS
+const API_URL = "http://localhost:8079/api"
+// #endif
+
 //const API_URL = "http://localhost:8079/api"
+//const API_URL = "http://139.9.200.212:8079/api"
 //const API_URL = "http://192.168.42.120:8079/api"
 const http = axios.create({
 	  baseURL: API_URL,
@@ -31,13 +37,24 @@ function registerApis(apis) {
 				config.url = config.urlFunc(param)
 			}
 			let fullUrl = `${API_URL}/${config.url}`
-			config.url = fullUrl
 			if (config.method.toUpperCase() == "POST") {
 				config.data = param
 			} else {
 				config.param = param
+				if (!!param && param.constructor == Object) {
+					let lstParam = []
+					for (let key in param) {
+						lstParam.push(`${key}=${param[key]}`)
+					}
+					if (lstParam.length > 0) {
+						if(fullUrl.indexOf("?") == -1) fullUrl = fullUrl + "?" 
+						else fullUrl = fullUrl + "&" 
+						fullUrl += lstParam.join("&")
+					}
+				}
 			}
-			if ( config.isloading !== false ) {
+			config.url = fullUrl
+			if ( config.isloading === true ) {
 				isloading = true
 				uni.showLoading()
 			}
@@ -81,6 +98,28 @@ function registerApis(apis) {
 
 
 let api = {
-	...registerApis(apis)
+	...registerApis(apis),
+	async upload(type, file) {
+		return new Promise((resolve, reject) => {
+			uni.uploadFile({
+				// 需要上传的地址
+				url: API_URL + "/upload",
+				// filePath  需要上传的文件
+				filePath: file,
+				name: 'file',
+				formData: { type },
+				success(res1) {
+					// 显示上传信息
+					resolve(res1.data)
+				},
+				fail(r) {
+					reject(r)
+				}
+			});
+		})
+	}
+}
+api.install = (Vue, options) => {
+	Vue.prototype.api = api
 }
 export default api

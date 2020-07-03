@@ -1,4 +1,8 @@
 export default {
+	searchPlan: {
+		url: `plan`,
+		method: "get"
+	},
 	getPlan: {
 		urlFunc: ({ id }) => {
 			return `plan/${ id }`
@@ -6,14 +10,14 @@ export default {
 		method: "get"
 	},
 	getUserOnedayPlans: {
-		urlFunc: ({ user, year, month, day }) => {
-			return `plans/${ user }/${ year }/${ month }/${ day }`
+		urlFunc: ({ user, year, month, date }) => {
+			return `plans/${ user }/${ year }/${ month }/${ date }`
 		},
 		method: "get"
 	},
 	getUserPlans: {
-		urlFunc: ({ user, isBrief }) => {
-			return `plans/${ user }?isBrief=${ !!isBrief?'true':'false' }`
+		urlFunc: ({ user }) => {
+			return `plans/${ user }`
 		},
 		method: "get"
 	},
@@ -27,13 +31,13 @@ export default {
 	},
 	followPlan: {
 		urlFunc: ({ user, planId }) => {
-			return `user/${ user }/${ planId }`
+			return `user_plan_map/${ user }/${ planId }`
 		},
 		method: "post"
 	},
 	cancelPlan: {
 		urlFunc: ({ user, planId }) => {
-			return `user/${ user }/${ planId }`
+			return `user_plan_map/${ user }/${ planId }`
 		},
 		method: "delete"
 	},

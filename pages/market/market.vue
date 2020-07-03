@@ -2,9 +2,9 @@
     <view>
 		<bert-list>
 			<template v-for="plan in plans">
-				<bert-list-item :title="plan.title" :author="plan.author" rightText="人气: 144">
+				<bert-list-item :title="plan.title" :author="plan.author" :rightText="'人气: ' + plan.hot + '  跟踪: ' + plan.follower">
 					<view style="display: flex; justify-content: flex-end;">
-						<view class="bert-btn" hover-class="bert-btn-hover" @click="toChapterEdit()">查看详情</view>
+						<view class="bert-btn" hover-class="bert-btn-hover" @click="toChapterEdit(plan.id)">查看详情</view>
 						<view v-if="!myPlanIds.includes(plan.id)" class="bert-btn" hover-class="bert-btn-hover" style="border-color: #ff5500; color: #ff5500" @click="followPlan(plan)">加入计划</view>
 						<view v-else class="bert-btn" hover-class="bert-btn-hover" @click="cancelPlan(plan)">取消计划</view>
 					</view>
@@ -48,22 +48,30 @@ import { mapState, mapGetters, mapActions } from "vuex"
 			},
 			followPlan(plan) {
 				this.api.followPlan({ user: this.userInfo.id, planId: plan.id }).then(r => {
+					plan.follower++;
 					this.searchMyPlans()
 				})
 			},
 			cancelPlan(plan) {
 				this.api.cancelPlan({ user: this.userInfo.id, planId: plan.id }).then(r => {
+					plan.follower--;
 					this.searchMyPlans()
 				})
+			},
+			load() {
+				this.searchPlans()
+				this.searchMyPlans()
 			}
         },
         onLoad() {
-			this.searchPlans()
-			this.searchMyPlans()
+			this.load()
         },
+		onShow() {
+			this.load()
+		},
 		// 下拉刷新
 		onPullDownRefresh() {
-			this.searchPlans();
+			this.load()
 			uni.stopPullDownRefresh();
 		}
     }

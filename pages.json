@@ -1,19 +1,24 @@
-{
+{	
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [
 		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/home/home",
 			"style": {
-				"navigationBarBackgroundColor": "#66ccff",
-				"navigationBarTitleText": "今日任务",
+				"enablePullDownRefresh": true
+			}
+		}, 
+		{
+			"path": "pages/update/update",
+			"style": {
+				"navigationStyle": "custom",  // 取消本页面的导航栏
 				"app-plus": {
-					"titleNView": {
-						"titleColor": "#ffffff",
-						"buttons": [{
-							"fontSrc": "/static/uni.ttf",
-							"text": "\ue502"
-						}]
-					}
+					"animationType": "fade-in", // 设置fade-in淡入动画，为最合理的动画类型
+					"background": "transparent", // 背景透明
+					"backgroundColor": "rgba(0,0,0,0)", // 背景透明
+					"popGesture": "none" // 关闭IOS屏幕左边滑动关闭当前页面的功能
 				}
 			}
 		},
@@ -38,6 +43,11 @@
 			"path": "pages/user/user",
 			"style": {
 				"transparentTitle": "always"
+			}
+		},
+		{
+			"path": "pages/user/my",
+			"style": {
 			}
 		},
 		{
@@ -80,13 +90,159 @@
 			"path": "pages/plan/plan-edit",
 			"style": { 
 			}
+		},
+		{
+			"path": "pages/plan/plan-viewer",
+			"style": { 
+			}
+		},
+		{
+			"path": "pages/suggestion/suggestion",
+			"style": { 
+			}
+		},
+		{
+			"path": "pages/user/user/user",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/user/user/user-edit-icon",
+			"style": {}
+		}, {
+			"path": "pages/user/setting/setting",
+			"style": {}
+		}, {
+			"path": "pages/account/login/login",
+			"style": {}
+		}, {
+			"path": "pages/account/register/register",
+			"style": {}
+		}, {
+			"path": "pages/account/findPassword/findPassword",
+			"style": {}
+		}, {
+			"path": "pages/account/safetyCenter/safetyCenter",
+			"style": {}
+		}, {
+			"path": "pages/account/setPassword/setPassword",
+			"style": {}
+		}, {
+			"path": "pages/account/updatePassword/updatePassword",
+			"style": {}
+		}, {
+			"path": "pages/account/setUserName/setUserName",
+			"style": {}
+		}, {
+			"path": "pages/account/updateUserName/updateUserName",
+			"style": {}
+		}, {
+			"path": "pages/account/login/pwd-login",
+			"style": {}
+		}, {
+			"path": "pages/account/login/sms-login",
+			"style": {}
+		}, {
+			"path": "pages/account/register/email-register",
+			"style": {}
+		}, {
+			"path": "pages/account/register/mobile-register",
+			"style": {}
+		}, {
+			"path": "pages/account/findPassword/email-findPassword",
+			"style": {}
+		}, {
+			"path": "pages/account/findPassword/mobile-findPassword",
+			"style": {}
+		}, {
+			"path": "pages/account/accountBind/accountBind",
+			"style": {}
+		}, {
+			"path": "pages/account/accountAppeal/accountAppeal",
+			"style": {}
+		}, {
+			"path": "pages/account/setSafetyQuestion/setSafetyQuestion",
+			"style": {}
+		}, {
+			"path": "pages/account/updateSafetyQuestion/updateSafetyQuestion",
+			"style": {}
+		}, {
+			"path": "pages/account/accountDestroy/accountDestroy",
+			"style": {}
+		}, {
+			"path": "pages/account/updateMobile/updateMobile",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindMobile/unbindMobile",
+			"style": {}
+		}, {
+			"path": "pages/account/bindMobile/bindMobile",
+			"style": {}
+		}, {
+			"path": "pages/account/bindEmail/bindEmail",
+			"style": {}
+		}, {
+			"path": "pages/account/updateEmail/updateEmail",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindEmail/unbindEmail",
+			"style": {}
+		}, {
+			"path": "pages/account/bindWeixin/bindWeixin",
+			"style": {}
+		}, {
+			"path": "pages/account/updateWeixin/updateWeixin",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindWeixin/unbindWeixin",
+			"style": {}
+		}, {
+			"path": "pages/account/bindWeibo/bindWeibo",
+			"style": {}
+		}, {
+			"path": "pages/account/updateWeibo/updateWeibo",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindWeibo/unbindWeibo",
+			"style": {}
+		}, {
+			"path": "pages/account/bindQq/bindQq",
+			"style": {}
+		}, {
+			"path": "pages/account/updateQq/updateQq",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindQq/unbindQq",
+			"style": {}
+		}, {
+			"path": "pages/account/bindTaobao/bindTaobao",
+			"style": {}
+		}, {
+			"path": "pages/account/updateTaobao/updateTaobao",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindTaobao/unbindTaobao",
+			"style": {}
+		}, {
+			"path": "pages/account/bindAlipay/bindAlipay",
+			"style": {}
+		}, {
+			"path": "pages/account/updateAlipay/updateAlipay",
+			"style": {}
+		}, {
+			"path": "pages/account/unbindAlipay/unbindAlipay",
+			"style": {}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#66ccff",
 		"navigationBarTitleText": "计划行事",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"app-plus": {
+			"titleNView": {
+				"titleColor": "#ffffff"
+			}
+		}
 	},
 	"tabBar": {
 		"borderStyle": "black",
@@ -98,6 +254,7 @@
 				"iconPath": "static/img/tabbar/home.png",
 				"selectedIconPath": "static/img/tabbar/homeactive.png",
 				"text": "计划"
+				
 			},
 			{
 				"pagePath": "pages/market/market",
@@ -112,7 +269,7 @@
 				"text": "消息"
 			},
 			{
-				"pagePath": "pages/user/user",
+				"pagePath": "pages/user/my",
 				"iconPath": "static/img/tabbar/me.png",
 				"selectedIconPath": "static/img/tabbar/meactive.png",
 				"text": "我的"

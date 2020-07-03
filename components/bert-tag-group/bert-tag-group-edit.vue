@@ -93,6 +93,8 @@
 					this.api.addTask({
 						planId: this.plan.id,
 						name: value
+					}).then(r => {
+						this.reloadPlan()
 					})
 				} else if ( type == "bert-tag-group/plan_title" ) {
 					this.plan.title = value
@@ -184,9 +186,14 @@
 		showDetail(item) {
 			this.navigator.toActivityDetail({ activity_id: item.id })
 		},
-      labelBtn(e) {
-		this.$emit("changeValue")
-	  }
+		  labelBtn(e) {
+			this.$emit("changeValue")
+		  },
+		  reloadPlan() {
+			  this.api.getPlan({ id: this.plan.id }).then(r => {
+				  this.plan = r
+			  })
+		  }
     }
   }
 </script>

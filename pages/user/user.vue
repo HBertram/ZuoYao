@@ -4,8 +4,8 @@
 		<view class="user-wrap">
 			<view class="setting iconfont icon31shezhi"></view>
 			<view class="info">
-				<image class="avatar" mode="aspectFill" :src="userInfo.headPicUrl"></image>
-				<view class="nickname">{{ userInfo.nickName }}</view>
+				<image class="avatar" mode="aspectFill" :src="userInfo.icon"></image>
+				<view class="nickname">{{ userInfo.name }}</view>
 			</view>
 		</view>
 
@@ -66,16 +66,13 @@
 
 <script>
 import comNav from './components/com-nav.vue'
+import { mapState } from "vuex"
 export default {
 	components: {
 		comNav
 	},
 	data() {
 		return {
-			userInfo: {
-				headPicUrl: '/static/images/user/avatar.jpg',
-				nickName: '史蒂芬.林'
-			},
 			orderStatusList: [
 				{ name: '待付款', icon: 'iconfont icon31daifukuan', status: 10 },
 				{ name: '待发货', icon: 'iconfont icon31daifahuo', status: 30 },
@@ -122,6 +119,9 @@ export default {
 			serverList: []
 		};
 	},
+	computed: {
+		...mapState(["userInfo"])
+	},
 	mounted() {
 		this.serverList = [
 				{
@@ -144,6 +144,12 @@ export default {
 					icon: '/static/images/user/icon-about.png',
 					text: '',
 					onclick: this.logout
+				},
+				{
+					title: '意见反馈',
+					icon: '/static/images/user/suggestion.png',
+					text: '',
+					onclick: this.navigator.toSuggestion
 				}
 			]
 	},
